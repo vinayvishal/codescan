@@ -37,7 +37,7 @@ format_dependency(){
    echo "      <ol>"
    echo "      <li> <a href=\"http://search.maven.org/#artifactdetails|$groupid|$artifactid|$version|jar\">http://search.maven.org/#artifactdetails|$groupid|$artifactid|$version|jar</a> </li>"
    echo "      <li> <a href=\"https://mvnrepository.com/artifact/$groupid/$artifactid/$version\">https://mvnrepository.com/artifact/$groupid/$artifactid/$version</a></li>"
-   echo "      </ol>"
+   echo "      </ol></td>"
    echo "      <td colspan=\"1\"> </td>"
    echo "      <td colspan=\"1\"> </td>"
    echo "      <td colspan=\"1\"> </td>"
