@@ -8,52 +8,54 @@ html_header(){
 
 cat > ./glassfish-stats.html <<EOF
 
-echo "<html>"
-echo "<title>glassfish-stats</title>"
+ <html>
+ <title>glassfish-stats</title>
 EOF
 
 }
 
 html_body(){
 cat >> ./glassfish-stats.html <<EOF
-echo "<body>"
-echo "<table border=\"1\">"
-echo "<tr>"
-echo "<th>Module</th>"
-echo "<th>Path</th>"
-echo "<th>File Count</th>"
-echo "<th>Details</th>"
-echo "</tr>"
+ <body>
+ <table border=\"1\">
+ <tr>
+ <th>Module</th>
+ <th>Path</th>
+ <th>File Count</th>
+ <th>Details</th>
+ </tr>
 EOF
 }
 
-#echo $(print_module_stats $1)
-#echo "</table>"
-#echo "</body>"
+# $(print_module_stats $1)
+# </table>
+# </body>
 
 html_footer(){
 
 cat >> ./glassfish-stats.html <<EOF
-echo "</table>"
-echo "</body>"
-echo "</html>"
+ </table>
+ </body>
+ </html>
 EOF
 }
 
 module_details(){
+cat >> ./glassfish-stats.html <<EOF
+ <table border=\"1\">
+ <tr>
+ <th>Type</th>
+ <th>Count</th>
+ </tr>
+EOF
+
 EXTENSIONS=()
 FILE_TYPES=""
 FILE_EXTENSION=""
 
 
-cat >> ./glassfish-stats.html <<EOF
-echo "<table border=\"1\">"
-echo "<tr>"
-echo "<th>Type</th>"
-echo "<th>Count</th>"
-echo "</tr>"
-INDEX=0
-COUNTER=0
+ INDEX=0
+ COUNTER=0
 for file in `find $1 ! -path "*target*"`
 do
  if [ -f $file ];then 
@@ -75,13 +77,22 @@ do
     COUNTER=`expr $COUNTER + 1`
     fi
   done 
-  echo "<tr>"
-  echo "<td>$ext</td>"
-  echo "<td>$COUNTER</td>"
-  echo "</tr>"
-COUNTER=0
-done 
-echo "</table>"
+  dump_module_stats $ext $COUNTER
+  COUNTER=0
+done
+
+cat >> ./glassfish-stats.html <<EOF
+ </table>
+EOF
+
+}
+
+dump_module_stats(){
+cat >> ./glassfish-stats.html <<EOF
+   <tr>
+   <td>$1</td>
+   <td>$2</td>
+   </tr>
 EOF
 }
 
@@ -106,50 +117,50 @@ for pom in `find $1 -name "pom.xml"`
 do
 
   COUNT=0
-  #echo $pom
+  # $pom
   PARENT_DIR="${pom%/*}"
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
 #  cat >> ./glassfish-stats.html <<EOF
-#  echo "<tr>"
-#  echo "<td>${PARENT_DIR##*/}</td>" 
-#  echo "<td>$PARENT_DIR</td>" 
-#  echo "<td>$COUNT</td>" 
+#   <tr>
+#   <td>${PARENT_DIR##*/}</td> 
+#   <td>$PARENT_DIR</td> 
+#   <td>$COUNT</td> 
 #  
 #  EOF
   
 cat >> ./glassfish-stats.html <<EOF
-   echo "<td>${PARENT_DIR##*/}</td>" 
-   echo "<td>$PARENT_DIR</td>" 
-   echo "<td>$COUNT</td>" 
-   echo "<td>
+    <td>${PARENT_DIR##*/}</td> 
+    <td>$PARENT_DIR</td> 
+    <td>$COUNT</td> 
+    <td>
 EOF
 $(module_details $PARENT_DIR)
 
 cat >> ./glassfish-stats.html <<EOF
-echo "</td>"
-echo "</tr>"
+ </td>
+ </tr>
 EOF
 
 done
 cat >> ./glassfish-stats.html <<EOF
-echo "<tr><td>"-"</td><td>"-"</td><td>$TOTAL_COUNT</td><td>"-"</td></tr>"
+ <tr><td>-</td><td>-</td><td>$TOTAL_COUNT</td><td>-</td></tr>
 EOF
 }
 
 dump_module_data(){
   COUNT=0
-  #echo $pom
+  # $pom
   PARENT_DIR="${1%/*}"
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
 cat >> ./glassfish-stats.html <<EOF
-  echo "<tr>"
-  echo "<td>${PARENT_DIR##*/}</td>" 
-  echo "<td>$PARENT_DIR</td>" 
-  echo "<td>$COUNT</td>" 
+   <tr>
+   <td>${PARENT_DIR##*/}</td> 
+   <td>$PARENT_DIR</td> 
+   <td>$COUNT</td> 
 EOF
 
 }
