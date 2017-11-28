@@ -6,48 +6,49 @@ TOTAL_COUNT=0
 
 html_header(){
 
-cat > ./glassfish-stats.html <<EOF
 
- <html>
- <title>glassfish-stats</title>
-EOF
+echo "<html>
+      <head>
+
+      <title>glassfish-stats</title>
+      <style>
+       table, th, td {
+          border: 1px solid black;
+        }
+       table {
+         border-collapse: collapse;
+         width: 100%;
+         table-layout: fixed;
+         }
+      </style>
+      </head>" > ./glassfish-stats.html
 
 }
 
 html_body(){
-cat >> ./glassfish-stats.html <<EOF
- <body>
- <table border=\"1\">
- <tr>
- <th>Module</th>
- <th>Path</th>
- <th>File Count</th>
- <th>Details</th>
- </tr>
-EOF
+echo "<body>" >> ./glassfish-stats.html
+echo "<table border=\"1\">" >> ./glassfish-stats.html
+echo "<tr>" >> ./glassfish-stats.html
+echo "<th>Module</th>" >> ./glassfish-stats.html
+echo "<th>Path</th>" >> ./glassfish-stats.html
+echo "<th>File Count</th>" >> ./glassfish-stats.html
+echo "<th>Details</th>" >> ./glassfish-stats.html
+echo "</tr>" >> ./glassfish-stats.html
 }
-
-# $(print_module_stats $1)
-# </table>
-# </body>
 
 html_footer(){
 
-cat >> ./glassfish-stats.html <<EOF
- </table>
- </body>
- </html>
-EOF
+echo "</table>" >> ./glassfish-stats.html
+echo "</body>" >> ./glassfish-stats.html
+echo "</html>" >> ./glassfish-stats.html
 }
 
 module_details(){
-cat >> ./glassfish-stats.html <<EOF
- <table border=\"1\">
- <tr>
- <th>Type</th>
- <th>Count</th>
- </tr>
-EOF
+echo "<table border=\"1\">" >> ./glassfish-stats.html
+echo "<tr>" >> ./glassfish-stats.html
+echo "<th>Type</th>" >> ./glassfish-stats.html
+echo "<th>Count</th>" >> ./glassfish-stats.html
+echo "</tr>" >> ./glassfish-stats.html
 
 EXTENSIONS=()
 FILE_TYPES=""
@@ -81,31 +82,25 @@ do
   COUNTER=0
 done
 
-cat >> ./glassfish-stats.html <<EOF
- </table>
-EOF
+echo "</table>" >> ./glassfish-stats.html
 
 }
 
 dump_module_stats(){
-cat >> ./glassfish-stats.html <<EOF
-   <tr>
-   <td>$1</td>
-   <td>$2</td>
-   </tr>
-EOF
+echo "<tr>" >> ./glassfish-stats.html
+echo "<td>$1</td>" >> ./glassfish-stats.html
+echo "<td>$2</td>" >> ./glassfish-stats.html
+echo "</tr>" >> ./glassfish-stats.html
 }
 
 generate_report(){
 
-#cat >> ./glassfish-stats.html <<EOF
 
 $(html_header)
 $(html_body)
 $(print_module_stats $1)
 $(html_footer)
 
-#EOF
 }
 
 print_module_stats(){
@@ -122,31 +117,23 @@ do
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
-#  cat >> ./glassfish-stats.html <<EOF
-#   <tr>
-#   <td>${PARENT_DIR##*/}</td> 
-#   <td>$PARENT_DIR</td> 
-#   <td>$COUNT</td> 
+#echo "<tr>" >> ./glassfish-stats.html
+#echo "<td>${PARENT_DIR##*/}</td> 
+#echo "<td>$PARENT_DIR</td> 
+#echo "<td>$COUNT</td> 
 #  
-#  EOF
   
-cat >> ./glassfish-stats.html <<EOF
-    <td>${PARENT_DIR##*/}</td> 
-    <td>$PARENT_DIR</td> 
-    <td>$COUNT</td> 
-    <td>
-EOF
+echo "<td>${PARENT_DIR##*/}</td>" >> ./glassfish-stats.html
+echo "<td>$PARENT_DIR</td>" >> ./glassfish-stats.html
+echo "<td>$COUNT</td>" >> ./glassfish-stats.html
+echo "<td>" >> ./glassfish-stats.html
 $(module_details $PARENT_DIR)
 
-cat >> ./glassfish-stats.html <<EOF
- </td>
- </tr>
-EOF
+echo "</td>" >> ./glassfish-stats.html
+echo "</tr>" >> ./glassfish-stats.html
 
 done
-cat >> ./glassfish-stats.html <<EOF
- <tr><td>-</td><td>-</td><td>$TOTAL_COUNT</td><td>-</td></tr>
-EOF
+echo "<tr><td>-</td><td>-</td><td>$TOTAL_COUNT</td><td>-</td></tr>" >> ./glassfish-stats.html
 }
 
 dump_module_data(){
@@ -156,12 +143,10 @@ dump_module_data(){
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
-cat >> ./glassfish-stats.html <<EOF
-   <tr>
-   <td>${PARENT_DIR##*/}</td> 
-   <td>$PARENT_DIR</td> 
-   <td>$COUNT</td> 
-EOF
+echo "<tr>" >> ./glassfish-stats.html
+echo "<td>${PARENT_DIR##*/}</td>" >> ./glassfish-stats.html
+echo "<td>$PARENT_DIR</td>" >> ./glassfish-stats.html
+echo "<td>$COUNT</td>" >> ./glassfish-stats.html
 
 }
 
