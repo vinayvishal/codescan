@@ -42,7 +42,7 @@ echo "<th>Count</th>"
 echo "</tr>"
 INDEX=0
 COUNTER=0
-for file in `find $1`
+for file in `find $1 ! -path "*target*"`
 do
  if [ -f $file ];then 
 #  echo "$file"
@@ -109,7 +109,7 @@ do
   echo "<tr>"
   echo "<td>${PARENT_DIR##*/}</td>" 
   echo "<td>$PARENT_DIR</td>" 
-  COUNT=`find "$PARENT_DIR" -type f | wc -l`
+  COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   echo "<td>$COUNT</td>" 
   echo "<td>$(module_details $PARENT_DIR)</td>"
