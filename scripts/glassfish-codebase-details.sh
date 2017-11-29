@@ -3,6 +3,7 @@
 ## functions ####
 
 TOTAL_COUNT=0
+OUTPUT_FILE=""
 
 html_header(){
 
@@ -21,34 +22,37 @@ echo "<html>
          table-layout: fixed;
          }
       </style>
-      </head>" > ./glassfish-stats.html
+      </head>" > $OUTPUT_FILE.html
 
 }
 
 html_body(){
-echo "<body>" >> ./glassfish-stats.html
-echo "<table border=\"1\">" >> ./glassfish-stats.html
-echo "<tr>" >> ./glassfish-stats.html
-echo "<th>Module</th>" >> ./glassfish-stats.html
-echo "<th>Path</th>" >> ./glassfish-stats.html
-echo "<th>File Count</th>" >> ./glassfish-stats.html
-echo "<th>Details</th>" >> ./glassfish-stats.html
-echo "</tr>" >> ./glassfish-stats.html
+echo "<body>" >> $OUTPUT_FILE.html
+echo "<table border=\"1\">" >> $OUTPUT_FILE.html
+echo "<tbody>" >> $OUTPUT_FILE.html
+echo "<tr>" >> $OUTPUT_FILE.html
+echo "<th>Module</th>" >> $OUTPUT_FILE.html
+echo "<th>Path</th>" >> $OUTPUT_FILE.html
+echo "<th>File Count</th>" >> $OUTPUT_FILE.html
+echo "<th>Details</th>" >> $OUTPUT_FILE.html
+echo "</tr>" >> $OUTPUT_FILE.html
 }
 
 html_footer(){
 
-echo "</table>" >> ./glassfish-stats.html
-echo "</body>" >> ./glassfish-stats.html
-echo "</html>" >> ./glassfish-stats.html
+echo "</tbody>" >> $OUTPUT_FILE.html
+echo "</table>" >> $OUTPUT_FILE.html
+echo "</body>" >> $OUTPUT_FILE.html
+echo "</html>" >> $OUTPUT_FILE.html
 }
 
 module_details(){
-echo "<table border=\"1\">" >> ./glassfish-stats.html
-echo "<tr>" >> ./glassfish-stats.html
-echo "<th>Type</th>" >> ./glassfish-stats.html
-echo "<th>Count</th>" >> ./glassfish-stats.html
-echo "</tr>" >> ./glassfish-stats.html
+echo "<table border=\"1\">" >> $OUTPUT_FILE.html
+echo "<tbody>" >> $OUTPUT_FILE.html
+echo "<tr>" >> $OUTPUT_FILE.html
+echo "<th>Type</th>" >> $OUTPUT_FILE.html
+echo "<th>Count</th>" >> $OUTPUT_FILE.html
+echo "</tr>" >> $OUTPUT_FILE.html
 
 EXTENSIONS=()
 FILE_TYPES=""
@@ -82,15 +86,16 @@ do
   COUNTER=0
 done
 
-echo "</table>" >> ./glassfish-stats.html
+echo "</tbody>" >> $OUTPUT_FILE.html
+echo "</table>" >> $OUTPUT_FILE.html
 
 }
 
 dump_module_stats(){
-echo "<tr>" >> ./glassfish-stats.html
-echo "<td>$1</td>" >> ./glassfish-stats.html
-echo "<td>$2</td>" >> ./glassfish-stats.html
-echo "</tr>" >> ./glassfish-stats.html
+echo "<tr>" >> $OUTPUT_FILE.html
+echo "<td>$1</td>" >> $OUTPUT_FILE.html
+echo "<td>$2</td>" >> $OUTPUT_FILE.html
+echo "</tr>" >> $OUTPUT_FILE.html
 }
 
 generate_report(){
@@ -117,23 +122,23 @@ do
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
-#echo "<tr>" >> ./glassfish-stats.html
+#echo "<tr>" >> $OUTPUT_FILE.html
 #echo "<td>${PARENT_DIR##*/}</td> 
 #echo "<td>$PARENT_DIR</td> 
 #echo "<td>$COUNT</td> 
 #  
-  
-echo "<td>${PARENT_DIR##*/}</td>" >> ./glassfish-stats.html
-echo "<td>$PARENT_DIR</td>" >> ./glassfish-stats.html
-echo "<td>$COUNT</td>" >> ./glassfish-stats.html
-echo "<td>" >> ./glassfish-stats.html
+echo "<tr>" >> $OUTPUT_FILE.html  
+echo "<td>${PARENT_DIR##*/}</td>" >> $OUTPUT_FILE.html
+echo "<td>$PARENT_DIR</td>" >> $OUTPUT_FILE.html
+echo "<td>$COUNT</td>" >> $OUTPUT_FILE.html
+echo "<td>" >> $OUTPUT_FILE.html
 $(module_details $PARENT_DIR)
 
-echo "</td>" >> ./glassfish-stats.html
-echo "</tr>" >> ./glassfish-stats.html
+echo "</td>" >> $OUTPUT_FILE.html
+echo "</tr>" >> $OUTPUT_FILE.html
 
 done
-echo "<tr><td>-</td><td>-</td><td>$TOTAL_COUNT</td><td>-</td></tr>" >> ./glassfish-stats.html
+echo "<tr><td>-</td><td>-</td><td>$TOTAL_COUNT</td><td>-</td></tr>" >> $OUTPUT_FILE.html
 }
 
 dump_module_data(){
@@ -143,10 +148,10 @@ dump_module_data(){
   COUNT=`find "$PARENT_DIR" -type f ! -path "*target*" | wc -l`
   TOTAL_COUNT=`expr $TOTAL_COUNT + $COUNT`
   
-echo "<tr>" >> ./glassfish-stats.html
-echo "<td>${PARENT_DIR##*/}</td>" >> ./glassfish-stats.html
-echo "<td>$PARENT_DIR</td>" >> ./glassfish-stats.html
-echo "<td>$COUNT</td>" >> ./glassfish-stats.html
+echo "<tr>" >> $OUTPUT_FILE.html
+echo "<td>${PARENT_DIR##*/}</td>" >> $OUTPUT_FILE.html
+echo "<td>$PARENT_DIR</td>" >> $OUTPUT_FILE.html
+echo "<td>$COUNT</td>" >> $OUTPUT_FILE.html
 
 }
 
@@ -154,5 +159,9 @@ echo "<td>$COUNT</td>" >> ./glassfish-stats.html
 ## main #########
 
 GLASSFISH_DIR=$1
+
+OUTPUT_FILE=${1##*\/}
+
+echo "Output file: $OUTPUT_FILE.html"
 
 generate_report $1
