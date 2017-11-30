@@ -113,7 +113,7 @@ print_module_stats(){
 
 ## iterate over the repo and find out all pom.xmls
 
-for pom in `find $1 -name "pom.xml"`
+for pom in `find $1 -maxdepth 3 -name "pom.xml"`
 do
 
   COUNT=0
