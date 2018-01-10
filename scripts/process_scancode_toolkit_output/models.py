@@ -25,7 +25,14 @@ class Copyright(object):
         return "Copyright:" + self.statement + "\n" + \
                "Holder:" + self.holder
 
+    def get_copyright_statement(self):
+        return self.statement
+
+    def get_copyright_holder(self):
+        return self.holder
+
 # License
+
 
 class License(object):
 
@@ -48,21 +55,25 @@ class License(object):
     def __str__(self):
         return "License:" + str(self.spdx_license_key)
 
+    def get_license(self):
+        return self.spdx_license_key
+
 # FileMetadata
+
 
 class FileMetadata(object):
 
-    def __init__(self,copyright,license):
+    def __init__(self, copyright, license):
         self.copyright = copyright
         self.license = license
 
     def __eq__(self, other):
-      if isinstance(other,self.__class__):
+      if isinstance(other, self.__class__):
         return self.copyright == other.copyright and self.license == other.license
       return False
 
     def __ne__(self, other):
-      if not isinstance(other,self.__class__):
+      if not isinstance(other, self.__class__):
         return True
       return self.copyright != other.copyright and self.license != other.license
 
@@ -71,3 +82,9 @@ class FileMetadata(object):
 
     def __str__(self):
         return str(self.copyright) + "\n" + str(self.license)
+
+    def get_copyright_obj(self):
+        return self.copyright
+
+    def get_license_obj(self):
+        return self.license

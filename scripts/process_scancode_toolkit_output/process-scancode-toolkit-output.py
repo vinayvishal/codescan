@@ -3,6 +3,7 @@
 import json
 import sys
 from models import Copyright, License, FileMetadata
+from dump_html import ScancodeTableHtmlGenerator
 
 
 def process_copyright_and_license_information(scancode_output_file):
@@ -32,7 +33,7 @@ def process_copyright_and_license_information(scancode_output_file):
       licenses = current_file['licenses']
 
       for license in licenses:
-        file_metadata = FileMetadata(License(license['spdx_license_key']), copyright_obj)
+        file_metadata = FileMetadata(copyright_obj, License(license['spdx_license_key']))
         if file_metadata not in file_metadata_dict:
           file_metadata_dict[file_metadata] = [current_file['path']]
         else:
@@ -48,8 +49,9 @@ def process_copyright_and_license_information(scancode_output_file):
   return file_metadata_dict
 
 
-def dump_html():
-  return "hello"
+def dump_html(file_metadata_dict):
+  html_generator = ScancodeTableHtmlGenerator("/home/vinay/out.html", file_metadata_dict)
+  html_generator.dump_scan_code_table()
 
 
 # main() #
@@ -57,4 +59,4 @@ def dump_html():
 if __name__ == "__main__":
 
   scancode_results_file = sys.argv[1]
-  process_copyright_and_license_information(scancode_results_file)
+  dump_html(process_copyright_and_license_information(scancode_results_file))

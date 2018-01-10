@@ -80,5 +80,5 @@ if __name__ == "__main__":
   groupId = sys.argv[1]
   artifactId = sys.argv[2]
   version = sys.argv[3] 
-  ddf = dependencyDetailsFetcher()
+  ddf = copyright_obj = Copyright(statement, holder)()
   ddf.fetchPOM(groupId,artifactId,version)
