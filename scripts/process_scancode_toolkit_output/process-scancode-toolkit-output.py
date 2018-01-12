@@ -19,6 +19,8 @@ def process_copyright_and_license_information(scancode_output_file):
     for current_file in files:
       statement = ""
       holder = ""
+      # Most of the file has got just one copyright. To get unique combination of license + copyright \
+      # ,get the first copyright information from copyright array
       copyrights = current_file['copyrights']
       if len(copyrights) != 0:
         copyright = copyrights[0]
@@ -32,20 +34,30 @@ def process_copyright_and_license_information(scancode_output_file):
       copyright_obj = Copyright(statement, holder)
       licenses = current_file['licenses']
 
+      # iterate over array of licenses for this file
       for license in licenses:
         file_metadata = FileMetadata(copyright_obj, License(license['spdx_license_key']))
         if file_metadata not in file_metadata_dict:
-          file_metadata_dict[file_metadata] = [current_file['path']]
+          file_ext_dic = {}
+          file_ext = current_file['extension']
+          if len(file_ext) == 0:
+            file_ext = "N/A"
+          file_ext_dic[file_ext] = [current_file['path']]
+          file_metadata_dict[file_metadata] = [file_ext_dic]
         else:
-          contained_files = file_metadata_dict.get(file_metadata)
+          existing_file_ext_dic = file_metadata_dict.get(file_metadata)
+          contained_files = existing_file_ext_dic.get(file_ext)
           if current_file['path'] not in contained_files:
             contained_files.append(current_file['path'])
 
     for file_metadata in file_metadata_dict:
       print (file_metadata)
-      values = file_metadata_dict.get(file_metadata)
-      for value in values:
-        print ('\t\t' + str(value))
+      file_ext_dic = file_metadata_dict.get(file_metadata)
+      for file_ext in file_ext_dic:
+        print('\t\t' + file_ext)
+        contained_files = file_ext_dic[file_ext]
+        for filename in contained_files:
+          print ('\t\t\t' + str(filename))
   return file_metadata_dict
 
 
