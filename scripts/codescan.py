@@ -8,6 +8,31 @@ from configparser import ConfigParser
 
 # copyright check #
 
+
+def get_copyright_plugin_jar_path():
+  config = ConfigParser()
+  config.read("codescan.ini")
+  copyright_path = config['COPYRIGHT_PLUGIN']['PATH']
+  copyright_jar = ""
+  if path.isdir(copyright_path):
+    copyright_plugin_target_dir = path.join(copyright_path, "target")
+    if path.exists(copyright_plugin_target_dir):
+      for filename in listdir(copyright_plugin_target_dir):
+          if filename.endswith("jar"):
+            copyright_jar = path.join(copyright_plugin_target_dir, filename)
+    else:
+        print("Copyright plugin directory doesn't have a target folder. Please run mvn clean install.")
+        exit(1)
+  else:
+    print("Specified copyright plugin path doesn't exist.")
+    exit(1)
+
+  if path.exists(copyright_jar):
+    return copyright_jar
+  else:
+    print("Copyright plugin jar doesn't exist in  target directory")
+
+
 def copyright_check():
   config = ConfigParser()
   config.read("codescan.ini")
@@ -20,17 +45,17 @@ def copyright_check():
           if filename.endswith("jar"):
             copyright_jar = path.join(copyright_plugin_target_dir, filename)
     else:
-        print ("Copyright plugin directory doesn't have a target folder. Please run mvn clean install.")
+        print("Copyright plugin directory doesn't have a target folder. Please run mvn clean install.")
         exit(1)
   else:
-    print ("Specified copyright plugin path doesn't exist.")
+    print("Specified copyright plugin path doesn't exist.")
     exit(1)
 
   if path.exists(copyright_jar):
-    print ("Executing copyright plugin")
-    call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", "-r", repo_to_be_scanned])
+    print("Executing copyright plugin")
+    call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", "-r", "-N", repo_to_be_scanned])
   else:
-    print ("Copyright plugin jar doesn't exist in  target directory")
+    print("Copyright plugin jar doesn't exist in  target directory")
 
 
 # copyright repair #
