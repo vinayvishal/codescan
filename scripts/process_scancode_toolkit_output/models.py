@@ -83,8 +83,8 @@ class FileMetadata(object):
     def __str__(self):
         return str(self.copyright) + "\n" + str(self.license)
 
-    def get_copyright_obj(self):
+    def get_copyright(self):
         return self.copyright
 
-    def get_license_obj(self):
+    def get_license(self):
         return self.license
