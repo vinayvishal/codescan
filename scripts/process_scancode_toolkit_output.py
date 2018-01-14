@@ -90,13 +90,13 @@ def print_file_metadata(file_metadata_dict):
         print('\t\t\t' + str(filename))
 
 
-def dump_html(file_metadata_dict):
-    html_generator = ScancodeTableHtmlGenerator("/home/vinay/out.html", file_metadata_dict)
+def dump_html(file_metadata_dict, output_file):
+    html_generator = ScancodeTableHtmlGenerator(output_file, file_metadata_dict)
     html_generator.dump_scan_code_table()
 
 
 # main() #
 
-if __name__ == "__main__":
-  scancode_results_file = sys.argv[1]
-  dump_html(process_copyright_and_license_information(scancode_results_file))
+# if __name__ == "__main__":
+#   scancode_results_file = sys.argv[1]
+#   dump_html(process_copyright_and_license_information(scancode_results_file))
