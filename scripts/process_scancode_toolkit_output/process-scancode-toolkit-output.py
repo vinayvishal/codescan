@@ -16,10 +16,12 @@ def process_license_files(current_file, file_name, file_metadata_dict):
 
   copyrights = current_file['copyrights']
   for cprt in copyrights:
-    holders = "\n".join(cprt['holders'])
-    copyright_array.append(holders)
+    # holders = "\n".join(cprt['holders'])
+    holders = cprt['holders']
+    for holder in holders:
+      copyright_array.append(holder)
 
-  file_metadata = FileMetadata("\n".join(copyright_array), "\n".join(license_array))
+  file_metadata = FileMetadata(" ".join(set(copyright_array)), " ".join(set(license_array)))
   file_metadata_dict[file_metadata] = {"N/A": [file_name]}
 
 
