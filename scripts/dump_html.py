@@ -154,7 +154,8 @@ class GenerateProjectWiki:
     with open(self.project_wiki, mode='a', encoding='utf-8') as f:
       f.write("<h2>Binary Dependencies</h2>\n")
       f.write("<p>Dependency list - <ac:link>\n")
-      f.write("    <ri:attachment ri:filename=\"" + TargetRepoConfig.get_repo_name() + "-dependency-list.txt\"\n")
+      f.write("    <ri:attachment ri:filename=\"" + TargetRepoConfig.get_repo_name()
+              + "-dependency-list.txt\"></ri:attachment>\n")
       f.write("  </ac:link>\n")
       f.write("</p>\n")
       f.write("<p>Note: We are ignoring all the dependencies on our code, "
