@@ -52,3 +52,12 @@ class TargetRepoConfig:
     config = ConfigParser()
     config.read("codescan.ini")
     return str(config['TARGET_REPO']['PATH']).split("/")[-1]
+
+
+class DependencyConfig:
+
+  @staticmethod
+  def get_exclude_groups():
+    config = ConfigParser()
+    config.read("codescan.ini")
+    return str(config['DEPENDENCY_LIST']['EXCLUDE_GROUPS'])

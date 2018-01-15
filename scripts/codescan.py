@@ -7,7 +7,7 @@ from os import path, listdir, getcwd
 from configparser import ConfigParser
 from process_scancode_toolkit_output import dump_parsed_scancode_result, process_copyright_and_license_information
 from dump_html import GenerateProjectWiki
-from config import TargetRepoConfig
+from config import TargetRepoConfig, DependencyConfig
 
 # copyright check #
 
@@ -70,7 +70,12 @@ def scancode():
   project_wiki.close()
 
 
-# def execute_maven_dependency_list():
+def execute_maven_dependency_list():
+  print(DependencyConfig.get_exclude_groups())
+  dependency_list_output = open(repo_name + "-dependency-list.txt", mode='w', encoding='utf-8')
+  call(['mvn', 'dependency:list', '-DexcludeGroupIds=' + DependencyConfig.get_exclude_groups()+"'"],
+       cwd=TargetRepoConfig.get_path(), stdout=dependency_list_output)
+  dependency_list_output.close()
 
 
 def parse_mvn_dependency_output():
@@ -108,7 +113,7 @@ if __name__ ==  "__main__":
   print("Results dumped to html.")
   output_wiki.dump_dependency_details_header()
   # maven dependency run #
-  # execute_maven_dependency_list()
+  execute_maven_dependency_list()
   # maven dependency analysis #
   # maven dependency table enrichment with release date/latest release#
   parse_mvn_dependency_output()
