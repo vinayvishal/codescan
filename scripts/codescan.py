@@ -58,8 +58,6 @@ def get_codescan_toolkit_path():
   if not path.isdir(codescan_toolkit_path):
     print("Specified toolkit path " + codescan_toolkit_path + " is not a directory.")
     exit(1)
-  print(codescan_toolkit_path)
-  print(str(codescan_toolkit_path).split("/")[-1])
   return codescan_toolkit_path
 
 
@@ -86,8 +84,8 @@ def parse_mvn_dependency_output():
 
 if __name__ ==  "__main__":
 
-  repo_to_be_scanned = sys.argv[1]
-  repo_name = str(repo_to_be_scanned).split("/")[-1]
+  repo_name = TargetRepoConfig.get_repo_name()
+  repo_to_be_scanned = TargetRepoConfig.get_path()
   print("Scanning " + repo_name + " repository:")
   output_wiki = GenerateProjectWiki(repo_name + ".html")
   output_wiki.dump_header()
