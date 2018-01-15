@@ -36,12 +36,12 @@ def get_copyright_plugin_jar_path():
 
 def copyright_check():
   copyright_jar = get_copyright_plugin_jar_path()
-  call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", repo_to_be_scanned])
+  call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", "-N", repo_to_be_scanned])
 
 
 def copyright_repair():
   copyright_jar = get_copyright_plugin_jar_path()
-  call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", "-r", "-N", repo_to_be_scanned])# copyright repair #
+  call(["java", "-cp", copyright_jar, "org.glassfish.copyright.Copyright", "-g", "-c", "-q", "-r", "-N", repo_to_be_scanned])# copyright repair #
 
 # codescan-toolkit-run #
 
@@ -80,11 +80,19 @@ if __name__ == "__main__":
 
   repo_to_be_scanned = sys.argv[1]
   repo_name = str(repo_to_be_scanned).split("/")[-1]
-  print(repo_to_be_scanned)
+  print("Scanning " + repo_name + " repository:")
+  print("Starting copyright check..")
   copyright_check()
+  print("Copyright check done.")
+  print("Starting copyright repair..")
   copyright_repair()
+  print("Copyright repair done.")
+  print("starting code scan..")
   scancode()
+  print("code scanning done.")
+  print("Scancode results being dumped to html..")
   dump_html(process_copyright_and_license_information(repo_name + ".json"), repo_name + ".html")
+  print("Results dumped to html.")
 
 
 

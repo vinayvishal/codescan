@@ -9,17 +9,17 @@ class ScancodeTableHtmlGenerator(object):
 
     def dump_scan_code_table(self):
 
-        # self.output_file = open(self.output_html,"w")
-        self.output_file.write("<html>\n")
-        self.output_file.write("<head>\n")
-        self.output_file.write("<style>\n")
-        self.output_file.write("table, th, td {\n")
-        self.output_file.write("border: 1px solid black;\n")
-        self.output_file.write("border-collapse: collapse;\n")
-        self.output_file.write("}\n")
-        self.output_file.write("</style>\n")
-        self.output_file.write("</head>\n")
-        self.output_file.write("<body>\n")
+        # self.output_file = open(self.output_html, "w")
+        # self.output_file.write("<html>\n")
+        # self.output_file.write("<head>\n")
+        # self.output_file.write("<style>\n")
+        # self.output_file.write("table, th, td {\n")
+        # self.output_file.write("border: 1px solid black;\n")
+        # self.output_file.write("border-collapse: collapse;\n")
+        # self.output_file.write("}\n")
+        # self.output_file.write("</style>\n")
+        # self.output_file.write("</head>\n")
+        # self.output_file.write("<body>\n")
         self.output_file.write("<table>\n")
         self.output_file.write("<tbody>\n")
         self.dump_scancode_table_header()
@@ -65,8 +65,8 @@ class ScancodeTableHtmlGenerator(object):
     def dump_scancode_table_footer(self):
         self.output_file.write("</tbody>\n")
         self.output_file.write("</table>\n")
-        self.output_file.write("</body>\n")
-        self.output_file.write("</html>")
+        # self.output_file.write("</body>\n")
+        # self.output_file.write("</html>")
 
     def dump_scancode_table_data(self):
         for file_metadata in self.file_metadata_dict:
@@ -98,7 +98,18 @@ class ScancodeTableHtmlGenerator(object):
         for file_ext in file_ext_dic:
             self.output_file.write("  <tr>\n")
             self.output_file.write("    <td>" + file_ext + "</td>\n")
-            self.output_file.write("    <td>" + "\n".join(file_ext_dic.get(file_ext)) + "</td>\n")
+            self.output_file.write("    <td>\n")
+            files = file_ext_dic.get(file_ext)
+            self.output_file.write("      <ol>\n")
+            for file_name in files:
+                self.output_file.write("     <li>" + file_name + "</li>\n")
+            self.output_file.write("      </ol>\n")
+            self.output_file.write("    </td>\n")
             self.output_file.write("  </tr>\n")
         self.output_file.write("</tbody>\n")
         self.output_file.write("</table>\n")
+
+# class GenerateProjectWiki:
+#
+#   def generate_header(self):
+
