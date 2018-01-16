@@ -47,10 +47,16 @@ def process_copyright_and_license_information(scancode_output_file):
           copyrights = current_file['copyrights']
           if len(copyrights) != 0:
             cprt = copyrights[0]
-            holders = cprt['holders']
-            if len(holders) != 0:
-              cprt_holder = holders[0]
-            else:
+            try:
+              holders = cprt['holders']
+              try:
+                if len(holders) != 0:
+                  cprt_holder = holders[0]
+                else:
+                  cprt_holder = "N/A"
+              except KeyError:
+                  cprt_holder = "N/A"
+            except KeyError:
               cprt_holder = "N/A"
           else:
             cprt_holder = "N/A"
@@ -60,8 +66,23 @@ def process_copyright_and_license_information(scancode_output_file):
         try:
           licenses = current_file['licenses']
           # iterate over array of licenses for this file
-          for lic in licenses:
-            file_metadata = FileMetadata(cprt_holder, lic['spdx_license_key'])
+          if len(licenses) != 0:
+            for lic in licenses:
+              file_metadata = FileMetadata(cprt_holder, lic['spdx_license_key'])
+              if file_metadata not in file_metadata_dict:
+                file_ext_dic = {file_ext: [file_name]}
+                file_metadata_dict[file_metadata] = file_ext_dic
+              else:
+                existing_file_ext_dic = file_metadata_dict.get(file_metadata)
+                if file_ext in existing_file_ext_dic:
+                  contained_files = existing_file_ext_dic[file_ext]
+                  # print(contained_files)
+                  if file_name not in contained_files:
+                    contained_files.append(file_name)
+                else:
+                  existing_file_ext_dic[file_ext] = [file_name]
+          else:
+            file_metadata = FileMetadata(cprt_holder, "N/A")
             if file_metadata not in file_metadata_dict:
               file_ext_dic = {file_ext: [file_name]}
               file_metadata_dict[file_metadata] = file_ext_dic
