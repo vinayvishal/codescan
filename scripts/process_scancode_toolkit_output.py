@@ -43,22 +43,39 @@ def process_copyright_and_license_information(scancode_output_file):
           file_ext = "N/A"
         # Most of the file has got just one copyright. To get unique combination of license +
         # copyright # ,get the first copyright information from copyright array
-        copyrights = current_file['copyrights']
-        if len(copyrights) != 0:
-          cprt = copyrights[0]
-          holders = cprt['holders']
-          if len(holders) != 0:
-            cprt_holder = holders[0]
+        try:
+          copyrights = current_file['copyrights']
+          if len(copyrights) != 0:
+            cprt = copyrights[0]
+            holders = cprt['holders']
+            if len(holders) != 0:
+              cprt_holder = holders[0]
+            else:
+              cprt_holder = "N/A"
           else:
             cprt_holder = "N/A"
-        else:
+        except KeyError:
           cprt_holder = "N/A"
 
-        licenses = current_file['licenses']
-
-        # iterate over array of licenses for this file
-        for lic in licenses:
-          file_metadata = FileMetadata(cprt_holder, lic['spdx_license_key'])
+        try:
+          licenses = current_file['licenses']
+          # iterate over array of licenses for this file
+          for lic in licenses:
+            file_metadata = FileMetadata(cprt_holder, lic['spdx_license_key'])
+            if file_metadata not in file_metadata_dict:
+              file_ext_dic = {file_ext: [file_name]}
+              file_metadata_dict[file_metadata] = file_ext_dic
+            else:
+              existing_file_ext_dic = file_metadata_dict.get(file_metadata)
+              if file_ext in existing_file_ext_dic:
+                contained_files = existing_file_ext_dic[file_ext]
+                # print(contained_files)
+                if file_name not in contained_files:
+                  contained_files.append(file_name)
+              else:
+                existing_file_ext_dic[file_ext] = [file_name]
+        except KeyError:
+          file_metadata = FileMetadata(cprt_holder, "N/A")
           if file_metadata not in file_metadata_dict:
             file_ext_dic = {file_ext: [file_name]}
             file_metadata_dict[file_metadata] = file_ext_dic
